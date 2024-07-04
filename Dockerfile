@@ -1,23 +1,25 @@
-# Why node:8 and not node:10? Because (a) v8 is LTS, so more likely to be stable, and (b) "npm update" on node:10 breaks on Docker on Linux (but not on OSX, oddly)
-FROM node:8-slim
+FROM node:10-buster
 
-RUN apt-get update \
-  && DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs-legacy npm git libboost1.55-all libssl-dev \
-  && rm -rf /var/lib/apt/lists/* && \
-  chmod +x /wait-for-it.sh
+# Install necessary packages
+RUN apt-get update && apt-get install -y \
+    curl \
+    libssl-dev \
+    libboost-all-dev \
+    libsodium-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-ADD . /pool/
-WORKDIR /pool/
+# Set the working directory
+WORKDIR /app
 
-RUN npm update
+# Copy all files to the container
+COPY . .
 
-RUN mkdir -p /config
+# Install npm dependencies
+RUN npm install
 
-EXPOSE 8117
-EXPOSE 3333
-EXPOSE 5555
-EXPOSE 7777
+RUN sed -i 's|"poolAddress": *".*"|"poolAddress": "your_pool_address"|' config.json
 
-VOLUME ["/config"]
+CMD ["node", "init.js"]
 
-CMD node init.js -config=/config/config.json
+
+

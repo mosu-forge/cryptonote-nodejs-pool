@@ -19,8 +19,17 @@ require('./lib/logger.js');
 // Initialize redis database client
 var redis = require('redis');
 
+var redisHost = process.env.REDIS_HOST || 'redis';
+var redisPort = process.env.REDIS_PORT || 6379;
+var redisAuth = process.env.REDIS_AUTH || null;
+var redisDB = process.env.REDIS_DB || 0;
+
 var redisDB = (config.redis.db && config.redis.db > 0) ? config.redis.db : 0;
-global.redisClient = redis.createClient(config.redis.port, config.redis.host, { db: redisDB, auth_pass: config.redis.auth });
+// global.redisClient = redis.createClient(config.redis.port, config.redis.host, { db: redisDB, auth_pass: config.redis.auth });
+global.redisClient = redis.createClient(redisPort, redisHost, {
+    db: redisDB,
+    auth_pass: redisAuth
+});
 
 // Load pool modules
 if (cluster.isWorker){
@@ -288,3 +297,5 @@ function spawnTelegramBot(){
         }, 2000);
     });
 }
+
+global.redisClient = redisClient;  // Make redisClient globally accessible

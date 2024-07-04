@@ -11,20 +11,20 @@
     "dependencies": {
         "async": "1",
         "base58-native": "*",
-        "bignum": "*",
+        "bignum": "0.13.0",
         "cli-color": "*",
-        "cryptoforknote-util": "git://github.com/MoneroOcean/node-cryptoforknote-util.git",
-        "cryptonight-hashing": "git://github.com/ryo-currency/node-cryptonight-hashing.git",
-        "dateformat": "*",
-        "mailgun.js": "*",
-        "node-telegram-bot-api": "*",
+        "cryptoforknote-util": "git+https://github.com/MoneroOcean/node-cryptoforknote-util.git",
+        "cryptonight-hashing": "git+https://github.com/ryo-currency/node-cryptonight-hashing.git",
+        "dateformat": "3.0.3",
+        "mailgun.js": "2.0.1",
+        "node-telegram-bot-api": "^0.66.0",
         "nodemailer": "2.7.2",
         "nodemailer-sendmail-transport": "*",
-        "redis": "*",
-        "socket.io": "^2.1.1",
-        "time-ago": "*",
-        "request": "^2.88.0",
-        "request-promise-native": "^1.0.5"
+        "redis": "2.8.0",
+        "request": "2.88.0",
+        "request-promise-native": "1.0.7",
+        "socket.io": "^2.5.1",
+        "time-ago": "*"
     },
     "engines": {
         "node": ">=8.11.3"

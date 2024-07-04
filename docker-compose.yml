@@ -1,0 +1,59 @@
+services:
+  redis:
+    image: 'redislabs/redismod'
+    restart: always
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis-data:/data  
+    networks:
+      - pool-network
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+  pool: 
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '8117:8117'
+      - '3333:3333'
+      - '4444:4444'
+      - '5555:5555'
+      - '7777:7777'
+      - '8888:8888'
+      - '9999:9999'
+    environment:
+      POOL_ADDRESS: "address of ryo"
+      REDIS_HOST: redis
+      REDIS_AUTH: null
+      REDIS_DB: 0
+      CLEANUP_INTERVAL: 15  
+    depends_on:
+      - redis
+    networks:
+      - pool-network
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+
+  nginx: 
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - '80:80'
+    depends_on:
+      - redis
+      - pool
+    networks:
+      - pool-network
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+
+volumes:
+  redis-data:  
+    driver: local
+
+networks:
+  pool-network:
+    driver: bridge
+
